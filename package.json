@@ -12,13 +12,20 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
+    "@types/morgan": "^1.9.9",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.4.7",
+    "envalid": "^8.0.0",
     "express": "^5.0.1",
-    "mongoose": "^8.11.0"
+    "mongoose": "^8.11.0",
+    "morgan": "^1.10.0",
+    "openai": "^4.96.0",
+    "stream-chat": "^8.60.0"
   }
 }
