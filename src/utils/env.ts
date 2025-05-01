@@ -1,13 +1,12 @@
 import dotenv from "dotenv";
-import { cleanEnv, str, url, num, port } from "envalid";
+import { cleanEnv, str, url, port } from "envalid";
 
 dotenv.config();
 
 const env = cleanEnv(process.env, {
   MONGODB_URI: url(),
-  OPENAI_API_KEY: str(),
-  STREAM_API_KEY: str(),
-  STREAM_API_SECRET: str(),
+  GEMINI_API_KEY: str(),
+  GEMINI_AI_MODEL: str(),
 
   PAYLOAD_LIMIT: str({ devDefault: "10mb" }),
   CORS_ORIGIN: str({ devDefault: "*" }),

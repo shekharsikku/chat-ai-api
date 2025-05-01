@@ -12,6 +12,8 @@ node_modules
 # logs and other files
 *.log
 *.local
+*.development
+*.production
 *.tsbuildinfo
 vite-env.d.ts
 

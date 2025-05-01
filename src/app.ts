@@ -41,7 +41,7 @@ if (env.isDev) {
 app.use("/api/chat", chat);
 
 app.all("*path", (_req: Request, res: Response) => {
-  res.status(200).json({ message: "Chat AI - Powered By OpenAI & GetStream" });
+  res.status(200).json({ message: "Chat AI - Powered By GenAI & GetStream" });
 });
 
 app.use(((err: any, _req: Request, res: Response, _next: NextFunction) => {
