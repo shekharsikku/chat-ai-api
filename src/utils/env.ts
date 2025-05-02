@@ -7,6 +7,7 @@ const env = cleanEnv(process.env, {
   MONGODB_URI: url(),
   GEMINI_API_KEY: str(),
   GEMINI_AI_MODEL: str(),
+  REDIRECT_ORIGIN: str(),
 
   PAYLOAD_LIMIT: str({ devDefault: "10mb" }),
   CORS_ORIGIN: str({ devDefault: "*" }),

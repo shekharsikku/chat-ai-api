@@ -41,7 +41,11 @@ if (env.isDev) {
 app.use("/api/chat", chat);
 
 app.all("*path", (_req: Request, res: Response) => {
-  res.status(200).json({ message: "Chat AI - Powered By GenAI" });
+  if (env.isDev) {
+    res.status(200).json({ message: "Chat AI - Powered By GenAI" });
+  } else {
+    res.status(307).redirect(env.REDIRECT_ORIGIN);
+  }
 });
 
 app.use(((err: any, _req: Request, res: Response, _next: NextFunction) => {
