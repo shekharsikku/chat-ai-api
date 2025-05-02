@@ -29,7 +29,12 @@ else {
 }
 app.use("/api/chat", chat_1.default);
 app.all("*path", (_req, res) => {
-    res.status(200).json({ message: "Chat AI - Powered By GenAI" });
+    if (env_1.default.isDev) {
+        res.status(200).json({ message: "Chat AI - Powered By GenAI" });
+    }
+    else {
+        res.status(307).redirect(env_1.default.REDIRECT_ORIGIN);
+    }
 });
 app.use(((err, _req, res, _next) => {
     console.error(`Error: ${err.message}`);

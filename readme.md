@@ -1,8 +1,8 @@
-## Chat AI API
+## **Chat AI API**
 
-This is a Node.js + TypeScript backend for a chat AI service using Express, Mongoose, and Google's Generative AI (Gemini) API.
+This is a `Node.js + TypeScript` backend for a chat AI service using `Express`, `Mongoose`, and `Google's Generative AI` (Gemini) API.
 
-### Features
+### **Features**
 
 - Express v5-based REST API
 - Mongoose-based MongoDB connection
