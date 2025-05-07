@@ -1,3 +1,4 @@
+import { ApiSuccess, ApiError, HttpError } from "./utils/index.js";
 import express, {
   NextFunction,
   Request,
@@ -6,8 +7,8 @@ import express, {
 } from "express";
 import morgan from "morgan";
 import cors from "cors";
-import env from "./utils/env";
-import chat from "./api/chat";
+import env from "./utils/env.js";
+import chat from "./api/chat.js";
 
 const app = express();
 
@@ -42,15 +43,32 @@ app.use("/api/chat", chat);
 
 app.all("*path", (_req: Request, res: Response) => {
   if (env.isDev) {
-    res.status(200).json({ message: "Chat AI - Powered By GenAI" });
+    return ApiSuccess(res, 200, "Chat AI - Powered By GenAI");
   } else {
     res.status(307).redirect(env.REDIRECT_ORIGIN);
   }
 });
 
-app.use(((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  console.error(`Error: ${err.message}`);
-  res.status(500).json({ message: "Internal Server Error!" });
+app.use(((err: Error, _req: Request, res: Response, next: NextFunction) => {
+  if (res.headersSent) return next(err);
+
+  if (err instanceof HttpError) {
+    return ApiError(
+      res,
+      err.code || 500,
+      err.message || "Internal server error!"
+    );
+  }
+
+  const fallback = env.isProd
+    ? "Something went wrong!"
+    : "Unknown error occurred!";
+
+  const message = err.message || fallback;
+
+  console.error(`Error: ${message}`);
+
+  return ApiError(res, 500, message);
 }) as ErrorRequestHandler);
 
 export default app;

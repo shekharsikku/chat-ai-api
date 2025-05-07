@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-const mongoose_1 = require("mongoose");
-const ChatSchema = new mongoose_1.Schema({
+import { Schema, model } from "mongoose";
+const ChatSchema = new Schema({
     uid: {
-        type: mongoose_1.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
@@ -18,5 +16,5 @@ const ChatSchema = new mongoose_1.Schema({
 }, {
     timestamps: true,
 });
-const Chat = (0, mongoose_1.model)("Chat", ChatSchema);
-exports.default = Chat;
+const Chat = model("Chat", ChatSchema);
+export default Chat;

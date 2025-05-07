@@ -1,6 +1,6 @@
-import mongodb from "./mongodb";
-import env from "./utils/env";
-import app from "./app";
+import mongodb from "./db/index.js";
+import env from "./utils/env.js";
+import app from "./app.js";
 
 const uri = env.MONGODB_URI;
 const port = env.PORT;

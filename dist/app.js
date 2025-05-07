@@ -1,43 +1,48 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const morgan_1 = __importDefault(require("morgan"));
-const cors_1 = __importDefault(require("cors"));
-const env_1 = __importDefault(require("./utils/env"));
-const chat_1 = __importDefault(require("./api/chat"));
-const app = (0, express_1.default)();
-app.use((0, cors_1.default)({
-    origin: env_1.default.CORS_ORIGIN,
+import { ApiSuccess, ApiError, HttpError } from "./utils/index.js";
+import express from "express";
+import morgan from "morgan";
+import cors from "cors";
+import env from "./utils/env.js";
+import chat from "./api/chat.js";
+const app = express();
+app.use(cors({
+    origin: env.CORS_ORIGIN,
     credentials: true,
 }));
-app.use(express_1.default.json({
-    limit: env_1.default.PAYLOAD_LIMIT,
+app.use(express.json({
+    limit: env.PAYLOAD_LIMIT,
     strict: true,
 }));
-app.use(express_1.default.urlencoded({
-    limit: env_1.default.PAYLOAD_LIMIT,
+app.use(express.urlencoded({
+    limit: env.PAYLOAD_LIMIT,
     extended: true,
 }));
-if (env_1.default.isDev) {
-    app.use((0, morgan_1.default)("dev"));
+if (env.isDev) {
+    app.use(morgan("dev"));
 }
 else {
-    app.use((0, morgan_1.default)("tiny"));
+    app.use(morgan("tiny"));
 }
-app.use("/api/chat", chat_1.default);
+app.use("/api/chat", chat);
 app.all("*path", (_req, res) => {
-    if (env_1.default.isDev) {
-        res.status(200).json({ message: "Chat AI - Powered By GenAI" });
+    if (env.isDev) {
+        return ApiSuccess(res, 200, "Chat AI - Powered By GenAI");
     }
     else {
-        res.status(307).redirect(env_1.default.REDIRECT_ORIGIN);
+        res.status(307).redirect(env.REDIRECT_ORIGIN);
     }
 });
-app.use(((err, _req, res, _next) => {
-    console.error(`Error: ${err.message}`);
-    res.status(500).json({ message: "Internal Server Error!" });
+app.use(((err, _req, res, next) => {
+    if (res.headersSent)
+        return next(err);
+    if (err instanceof HttpError) {
+        return ApiError(res, err.code || 500, err.message || "Internal server error!");
+    }
+    const fallback = env.isProd
+        ? "Something went wrong!"
+        : "Unknown error occurred!";
+    const message = err.message || fallback;
+    console.error(`Error: ${message}`);
+    return ApiError(res, 500, message);
 }));
-exports.default = app;
+export default app;

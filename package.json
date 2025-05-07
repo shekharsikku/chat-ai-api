@@ -1,6 +1,7 @@
 {
   "name": "chat-ai-api",
-  "version": "1.0.0",
+  "type": "module",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -11,10 +12,12 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "packageManager": "npm@10.9.2",
   "devDependencies": {
     "@types/cors": "^2.8.17",
     "@types/express": "^5.0.1",
     "@types/morgan": "^1.9.9",
+    "@types/node": "^22.15.3",
     "tsx": "^4.19.3",
     "typescript": "^5.8.3"
   },

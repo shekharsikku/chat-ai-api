@@ -1,19 +1,14 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const mongodb_1 = __importDefault(require("./mongodb"));
-const env_1 = __importDefault(require("./utils/env"));
-const app_1 = __importDefault(require("./app"));
-const uri = env_1.default.MONGODB_URI;
-const port = env_1.default.PORT;
+import mongodb from "./db/index.js";
+import env from "./utils/env.js";
+import app from "./app.js";
+const uri = env.MONGODB_URI;
+const port = env.PORT;
 (async () => {
     try {
-        const state = await (0, mongodb_1.default)(uri);
+        const state = await mongodb(uri);
         if (state === 1) {
             console.log("Database connection success!");
-            app_1.default.listen(port, () => {
+            app.listen(port, () => {
                 console.log(`Server running on port: ${port}\n`);
             });
         }

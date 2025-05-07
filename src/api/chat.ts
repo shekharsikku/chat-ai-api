@@ -1,9 +1,9 @@
+import { HttpError, ApiError, ApiSuccess } from "../utils/index.js";
 import { GoogleGenAI } from "@google/genai";
 import { Router, Request, Response } from "express";
-import { ApiError, ApiResponse } from "../utils";
-import User from "../model/user";
-import Chat from "../model/chat";
-import env from "../utils/env";
+import User from "../model/user.js";
+import Chat from "../model/chat.js";
+import env from "../utils/env.js";
 
 const genAI = new GoogleGenAI({ apiKey: env.GEMINI_API_KEY });
 
@@ -12,7 +12,7 @@ const registerUser = async (req: Request, res: Response): Promise<any> => {
     const { name, email } = await req.body;
 
     if (!name || !email) {
-      throw new ApiError(400, "Name & Email are required!");
+      throw new HttpError(400, "Name & Email are required!");
     }
 
     let existsUser = await User.findOneAndUpdate(
@@ -26,10 +26,10 @@ const registerUser = async (req: Request, res: Response): Promise<any> => {
       existsUser = await User.create({ name, email });
     }
 
-    return ApiResponse(res, 201, "User registered successfully!", existsUser);
+    return ApiSuccess(res, 201, "User registered successfully!", existsUser);
   } catch (error: any) {
     console.log(`Error: ${error.message}`);
-    return ApiResponse(
+    return ApiError(
       res,
       error.code || 400,
       error.message || "Error while registering user to stream chat!"
@@ -42,13 +42,13 @@ const sendMessage = async (req: Request, res: Response): Promise<any> => {
     const { message, uid } = await req.body;
 
     if (!message || !uid) {
-      throw new ApiError(400, "Message and UserId are required!");
+      throw new HttpError(400, "Message and UserId are required!");
     }
 
     const existsUser = await User.findById(uid);
 
     if (!existsUser) {
-      throw new ApiError(404, "User not found. Please register first!");
+      throw new HttpError(404, "User not found. Please register first!");
     }
 
     const chatHistory = await Chat.find({ uid: existsUser._id })
@@ -77,7 +77,7 @@ const sendMessage = async (req: Request, res: Response): Promise<any> => {
       reply: geminiReply,
     });
 
-    return ApiResponse(
+    return ApiSuccess(
       res,
       200,
       "Gemini respond message successfully",
@@ -85,7 +85,7 @@ const sendMessage = async (req: Request, res: Response): Promise<any> => {
     );
   } catch (error: any) {
     console.log(`Error: ${error.message}`);
-    return ApiResponse(
+    return ApiError(
       res,
       error.code || 400,
       error.message || "Error while getting response from Gemini!"
@@ -98,12 +98,12 @@ const getMessages = async (req: Request, res: Response): Promise<any> => {
     const { uid } = await req.body;
 
     if (!uid) {
-      throw new ApiError(400, "UserId is required!");
+      throw new HttpError(400, "UserId is required!");
     }
 
     const chatHistory = await Chat.find({ uid });
 
-    return ApiResponse(
+    return ApiSuccess(
       res,
       200,
       "Chat message fetched successfully!",
@@ -111,7 +111,7 @@ const getMessages = async (req: Request, res: Response): Promise<any> => {
     );
   } catch (error: any) {
     console.log(`Error: ${error.message}`);
-    return ApiResponse(
+    return ApiError(
       res,
       error.code || 400,
       error.message || "Error while fetching chat message history!"
