@@ -45,7 +45,7 @@ const sendMessage = async (req: Request, res: Response): Promise<any> => {
       throw new HttpError(400, "Message and UserId are required!");
     }
 
-    const existsUser = await User.findById(uid);
+    const existsUser = await User.exists({ _id: uid });
 
     if (!existsUser) {
       throw new HttpError(404, "User not found. Please register first!");
