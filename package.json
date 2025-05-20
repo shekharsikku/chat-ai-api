@@ -1,7 +1,7 @@
 {
   "name": "chat-ai-api",
   "type": "module",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -12,22 +12,22 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "packageManager": "npm@10.9.2",
+  "packageManager": "npm@11.4.1",
   "devDependencies": {
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.1",
+    "@types/cors": "^2.8.18",
+    "@types/express": "^5.0.2",
     "@types/morgan": "^1.9.9",
-    "@types/node": "^22.15.3",
-    "tsx": "^4.19.3",
+    "@types/node": "^22.15.21",
+    "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
   "dependencies": {
-    "@google/genai": "^0.10.0",
+    "@google/genai": "^1.0.1",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "envalid": "^8.0.0",
-    "express": "^5.0.1",
-    "mongoose": "^8.11.0",
+    "express": "^5.1.0",
+    "mongoose": "^8.15.0",
     "morgan": "^1.10.0"
   }
 }
