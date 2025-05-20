@@ -1,14 +1,21 @@
-import dotenv from "dotenv";
+import { config } from "dotenv";
 import { cleanEnv, str, url, port } from "envalid";
-dotenv.config();
-const env = cleanEnv(process.env, {
+const result = config();
+if (result.error) {
+    console.error(result.error.message);
+    process.exit(1);
+}
+const env = cleanEnv(result.parsed, {
     MONGODB_URI: url(),
     GEMINI_API_KEY: str(),
     GEMINI_AI_MODEL: str(),
-    REDIRECT_ORIGIN: str(),
-    PAYLOAD_LIMIT: str({ devDefault: "10mb" }),
-    CORS_ORIGIN: str({ devDefault: "*" }),
-    PORT: port({ devDefault: 4000 }),
-    NODE_ENV: str({ choices: ["development", "production"] }),
+    REDIRECT_ORIGIN: url(),
+    PAYLOAD_LIMIT: str({ default: "100kb" }),
+    CORS_ORIGIN: str({ default: "*" }),
+    PORT: port({ default: 4000 }),
+    NODE_ENV: str({
+        choices: ["development", "production"],
+        default: "development",
+    }),
 });
 export default env;

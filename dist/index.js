@@ -1,12 +1,12 @@
-import mongodb from "./db/index.js";
+import { connect } from "mongoose";
 import env from "./utils/env.js";
 import app from "./app.js";
 const uri = env.MONGODB_URI;
 const port = env.PORT;
 (async () => {
     try {
-        const state = await mongodb(uri);
-        if (state === 1) {
+        const { connection } = await connect(uri);
+        if (connection.readyState === 1) {
             console.log("Database connection success!");
             app.listen(port, () => {
                 console.log(`Server running on port: ${port}\n`);

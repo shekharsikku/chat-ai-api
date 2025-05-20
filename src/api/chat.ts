@@ -1,6 +1,7 @@
-import { HttpError, ApiError, ApiSuccess } from "../utils/index.js";
+import type { Request, Response } from "express";
+import { HttpError, ErrorResponse, SuccessResponse } from "../utils/index.js";
 import { GoogleGenAI } from "@google/genai";
-import { Router, Request, Response } from "express";
+import { Router } from "express";
 import User from "../model/user.js";
 import Chat from "../model/chat.js";
 import env from "../utils/env.js";
@@ -26,10 +27,15 @@ const registerUser = async (req: Request, res: Response): Promise<any> => {
       existsUser = await User.create({ name, email });
     }
 
-    return ApiSuccess(res, 201, "User registered successfully!", existsUser);
+    return SuccessResponse(
+      res,
+      201,
+      "User registered successfully!",
+      existsUser
+    );
   } catch (error: any) {
     console.log(`Error: ${error.message}`);
-    return ApiError(
+    return ErrorResponse(
       res,
       error.code || 400,
       error.message || "Error while registering user to stream chat!"
@@ -77,7 +83,7 @@ const sendMessage = async (req: Request, res: Response): Promise<any> => {
       reply: geminiReply,
     });
 
-    return ApiSuccess(
+    return SuccessResponse(
       res,
       200,
       "Gemini respond message successfully",
@@ -85,7 +91,7 @@ const sendMessage = async (req: Request, res: Response): Promise<any> => {
     );
   } catch (error: any) {
     console.log(`Error: ${error.message}`);
-    return ApiError(
+    return ErrorResponse(
       res,
       error.code || 400,
       error.message || "Error while getting response from Gemini!"
@@ -103,7 +109,7 @@ const getMessages = async (req: Request, res: Response): Promise<any> => {
 
     const chatHistory = await Chat.find({ uid });
 
-    return ApiSuccess(
+    return SuccessResponse(
       res,
       200,
       "Chat message fetched successfully!",
@@ -111,7 +117,7 @@ const getMessages = async (req: Request, res: Response): Promise<any> => {
     );
   } catch (error: any) {
     console.log(`Error: ${error.message}`);
-    return ApiError(
+    return ErrorResponse(
       res,
       error.code || 400,
       error.message || "Error while fetching chat message history!"

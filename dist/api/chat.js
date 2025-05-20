@@ -1,4 +1,4 @@
-import { HttpError, ApiError, ApiSuccess } from "../utils/index.js";
+import { HttpError, ErrorResponse, SuccessResponse } from "../utils/index.js";
 import { GoogleGenAI } from "@google/genai";
 import { Router } from "express";
 import User from "../model/user.js";
@@ -16,11 +16,11 @@ const registerUser = async (req, res) => {
             console.log(`User ${email} doesn't exists, registering them...!`);
             existsUser = await User.create({ name, email });
         }
-        return ApiSuccess(res, 201, "User registered successfully!", existsUser);
+        return SuccessResponse(res, 201, "User registered successfully!", existsUser);
     }
     catch (error) {
         console.log(`Error: ${error.message}`);
-        return ApiError(res, error.code || 400, error.message || "Error while registering user to stream chat!");
+        return ErrorResponse(res, error.code || 400, error.message || "Error while registering user to stream chat!");
     }
 };
 const sendMessage = async (req, res) => {
@@ -53,11 +53,11 @@ const sendMessage = async (req, res) => {
             message: message,
             reply: geminiReply,
         });
-        return ApiSuccess(res, 200, "Gemini respond message successfully", savedChat);
+        return SuccessResponse(res, 200, "Gemini respond message successfully", savedChat);
     }
     catch (error) {
         console.log(`Error: ${error.message}`);
-        return ApiError(res, error.code || 400, error.message || "Error while getting response from Gemini!");
+        return ErrorResponse(res, error.code || 400, error.message || "Error while getting response from Gemini!");
     }
 };
 const getMessages = async (req, res) => {
@@ -67,11 +67,11 @@ const getMessages = async (req, res) => {
             throw new HttpError(400, "UserId is required!");
         }
         const chatHistory = await Chat.find({ uid });
-        return ApiSuccess(res, 200, "Chat message fetched successfully!", chatHistory);
+        return SuccessResponse(res, 200, "Chat message fetched successfully!", chatHistory);
     }
     catch (error) {
         console.log(`Error: ${error.message}`);
-        return ApiError(res, error.code || 400, error.message || "Error while fetching chat message history!");
+        return ErrorResponse(res, error.code || 400, error.message || "Error while fetching chat message history!");
     }
 };
 const router = Router();

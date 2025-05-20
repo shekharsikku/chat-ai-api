@@ -8,16 +8,16 @@ class HttpError extends Error {
         this.stack = stack;
     }
 }
-const ApiError = (res, code, message, error = null) => {
+const ErrorResponse = (res, code, message, error = null) => {
     const response = { success: false, message };
     if (error)
         response.error = error;
     res.status(code).json(response);
 };
-const ApiSuccess = (res, code, message, data = null) => {
+const SuccessResponse = (res, code, message, data = null) => {
     const response = { success: true, message };
     if (data)
         response.data = data;
     res.status(code).json(response);
 };
-export { HttpError, ApiError, ApiSuccess };
+export { HttpError, ErrorResponse, SuccessResponse };

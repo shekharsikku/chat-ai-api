@@ -1,4 +1,4 @@
-import { Response } from "express";
+import type { Response } from "express";
 
 class HttpError extends Error {
   public code: number;
@@ -21,7 +21,7 @@ type TypeResponse<T = any, E = any> = {
   error?: E;
 };
 
-const ApiError = (
+const ErrorResponse = (
   res: Response,
   code: number,
   message: string,
@@ -33,7 +33,7 @@ const ApiError = (
   res.status(code).json(response);
 };
 
-const ApiSuccess = (
+const SuccessResponse = (
   res: Response,
   code: number,
   message: string,
@@ -45,4 +45,4 @@ const ApiSuccess = (
   res.status(code).json(response);
 };
 
-export { HttpError, ApiError, ApiSuccess };
+export { HttpError, ErrorResponse, SuccessResponse };

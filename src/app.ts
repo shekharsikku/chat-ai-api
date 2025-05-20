@@ -1,10 +1,11 @@
-import { ApiSuccess, ApiError, HttpError } from "./utils/index.js";
-import express, {
+import { SuccessResponse, ErrorResponse, HttpError } from "./utils/index.js";
+import type {
   NextFunction,
   Request,
   Response,
   ErrorRequestHandler,
 } from "express";
+import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import env from "./utils/env.js";
@@ -43,7 +44,7 @@ app.use("/api/chat", chat);
 
 app.all("*path", (_req: Request, res: Response) => {
   if (env.isDev) {
-    return ApiSuccess(res, 200, "Chat AI - Powered By GenAI");
+    return SuccessResponse(res, 200, "Chat AI - Powered By GenAI");
   } else {
     res.status(307).redirect(env.REDIRECT_ORIGIN);
   }
@@ -53,7 +54,7 @@ app.use(((err: Error, _req: Request, res: Response, next: NextFunction) => {
   if (res.headersSent) return next(err);
 
   if (err instanceof HttpError) {
-    return ApiError(
+    return ErrorResponse(
       res,
       err.code || 500,
       err.message || "Internal server error!"
@@ -68,7 +69,7 @@ app.use(((err: Error, _req: Request, res: Response, next: NextFunction) => {
 
   console.error(`Error: ${message}`);
 
-  return ApiError(res, 500, message);
+  return ErrorResponse(res, 500, message);
 }) as ErrorRequestHandler);
 
 export default app;
